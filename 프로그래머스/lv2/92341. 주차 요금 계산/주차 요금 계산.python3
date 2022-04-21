@@ -1,0 +1,34 @@
+from math import ceil
+
+def solution(fees, records):    
+    btime, bfee, utime, ufee = fees
+    
+    d_inout = {}
+    for t, num, s in list(map(lambda x: x.split(), records)):
+        if num in d_inout:
+            d_inout[num].append(t)
+        else:
+            d_inout[num] = [t]
+    
+    ans = []
+    for num, t_list in d_inout.items():
+        t = 0
+        while len(t_list) != 0:
+            if len(t_list) == 1:
+                s = t_list.pop(0)
+                e = "23:59"
+            else:
+                s = t_list.pop(0)
+                e = t_list.pop(0)
+            s1, s2 = map(int, s.split(":"))
+            e1, e2 = map(int, e.split(":"))
+            t += (e1 - s1) * 60 + e2 - s2
+        fee = 0
+        if t <= btime:
+            fee = bfee
+        else:
+            fee = bfee + ceil((t- btime) / utime) * ufee
+        ans.append((num, fee))
+        
+    ans.sort()
+    return list(f for num, f in ans)
