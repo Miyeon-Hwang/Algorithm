@@ -1,0 +1,30 @@
+def convert(n, k):
+    res = 0
+    i = 0
+    while n != 0:
+        res += (n % k) * 10 ** i
+        n = n // k
+        i += 1
+    return res
+
+def is_prime(n):
+    if n == 1:
+        return False
+    if n == 2 or n == 3:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n ** 0.5 + 1), 2):
+        if n % i == 0:
+            return False
+    return True
+    
+def solution(n, k):
+    cvt_s = str(convert(n, k))
+    ans = 0
+    for num in cvt_s.split("0"):
+        if not num:
+            continue
+        if is_prime(int(num)):
+            ans += 1
+    return ans
