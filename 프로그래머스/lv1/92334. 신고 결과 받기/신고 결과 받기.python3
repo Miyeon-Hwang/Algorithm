@@ -1,0 +1,19 @@
+def solution(id_list, report, k):
+    n = len(id_list)
+    id_idx = {id:i for i, id in enumerate(id_list)}
+    rp_list = [[] for _ in range(n)]
+    ans = [0 for _ in range(n)]
+    
+    for r in report: # 다른사람 풀이보면 set으로 중복제거하는데 그냥 비교하는게 시간으로는 더 빠름
+        u1, u2 = r.split()
+        i1 = id_idx[u1]
+        i2 = id_idx[u2]
+        if i1 not in rp_list[i2]:
+            rp_list[i2].append(i1)
+        
+    for l in rp_list:
+        if len(l) >= k:
+            for u in l:
+                ans[u] += 1
+                
+    return ans
