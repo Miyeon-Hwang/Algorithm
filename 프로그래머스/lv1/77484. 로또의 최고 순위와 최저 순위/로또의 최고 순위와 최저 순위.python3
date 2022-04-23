@@ -1,0 +1,9 @@
+def solution(lottos, win_nums):
+    rank = [6, 6, 5, 4, 3, 2, 1]
+    
+    unknown = lottos.count(0)
+    if unknown > 0:
+        lottos = list(set(lottos))
+        lottos.remove(0)
+    cmn = 12 - unknown - len(set(lottos + win_nums))
+    return [rank[cmn + unknown], rank[cmn]]
