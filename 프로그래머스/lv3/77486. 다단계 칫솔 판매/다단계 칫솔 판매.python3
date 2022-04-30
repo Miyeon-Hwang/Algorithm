@@ -1,0 +1,30 @@
+# 첫풀이에는 정보를 enroll을 key로하는 dict로 다 저장했는데
+# enroll idx만 dict로 저장해놓고 다른데서는 idx로 찾아가게 하니까 좀 더 빠르네
+
+def solution(enroll, referral, seller, amount):
+    n = len(enroll)
+    enrl_idx = {e:i for i,e in enumerate(enroll)}
+    res = [0 for _ in range(n)]
+    
+    amnt = [[] for _ in range(n)]
+    # seller 중복 amount list로 저장해야 함!! 
+    # 수수료 받을 때 5, 6 따로 넘어가는거랑 11로 넘어가는거랑 10%가 달라지니까
+    for i, s in enumerate(seller):
+        amnt[enrl_idx[s]].append(amount[i] * 100)
+        
+    # enroll 맨 뒤부터 이익금 분배하기
+    for i in range(n - 1, -1, -1):
+        for amn in amnt[i]:
+            if amn < 10:
+                res[i] += amn
+                continue
+            
+            ref = referral[i]
+            temp = amn // 10
+            if ref == "-":
+                res[i] += amn - temp
+            else:
+                amnt[enrl_idx[ref]].append(temp)
+                res[i] += amn - temp
+
+    return res
