@@ -1,0 +1,50 @@
+max_score_diff = 0
+apeach = []
+
+
+def get_score(ryan):
+    global max_score_diff, apeach
+    score = 0
+    for i in range(11):
+        if ryan[i] > apeach[i]:
+            score += 10 - i
+        elif apeach[i] != 0:
+            score -= 10 - i
+    return score
+
+
+def play(num, cur_s, ryan, answer):
+    global max_score_diff, apeach
+    if num == 0:
+        score = get_score(ryan)
+        if score > max_score_diff:
+            max_score_diff = score
+            answer.clear()
+            answer.append(ryan[:])
+        elif score == max_score_diff:
+            max_score_diff = score
+            answer.append(ryan[:])
+        return
+
+    for s in range(10 - cur_s, 11):
+        if apeach[s] + 1 <= num:
+            ryan[s] = apeach[s] + 1
+        elif s == 10:
+            ryan[s] = num
+        else:
+            continue
+        play(num - ryan[s], (10 - s) - 1, ryan, answer)
+        ryan[s] = 0
+
+
+def solution(n, info):
+    global max_score_diff, apeach
+    apeach = info
+    answer = []
+    play(n, 10, [0 for _ in range(11)], answer)
+    if max_score_diff == 0:
+        return [-1]
+    if len(answer) > 1:
+        temp = list(list(reversed(x)) for x in answer)
+        return list(reversed(sorted(temp, reverse=True)[0]))
+    return answer[0] if answer else [-1]
