@@ -21,7 +21,7 @@ def play(num, cur_s, ryan, answer):
             max_score_diff = score
             answer.clear()
             answer.append(ryan[:])
-        elif score == max_score_diff:
+        elif score > 0 and score == max_score_diff:
             max_score_diff = score
             answer.append(ryan[:])
         return
@@ -42,8 +42,6 @@ def solution(n, info):
     apeach = info
     answer = []
     play(n, 10, [0 for _ in range(11)], answer)
-    if max_score_diff == 0:
-        return [-1]
     if len(answer) > 1:
         temp = list(list(reversed(x)) for x in answer)
         return list(reversed(sorted(temp, reverse=True)[0]))
