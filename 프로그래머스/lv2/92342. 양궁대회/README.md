@@ -1,3 +1,5 @@
+### comment : 수가 크지 않으니 전체탐색으로 바로 갔어야. 아이디어 생각해내려고 하다가 시간 너무 많이 허비함 ㅜ 꼭 다시 풀어보자
+
 # [level 2] 양궁대회 - 92342 
 
 [문제 링크](https://programmers.co.kr/learn/courses/30/lessons/92342#qna) 
