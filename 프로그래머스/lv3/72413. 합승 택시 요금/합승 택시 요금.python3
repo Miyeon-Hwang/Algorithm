@@ -24,15 +24,17 @@ def solution(n, s, a, b, fares):
         fare_map[i].append([j, f])
         fare_map[j].append([i, f])
 
-    fare_min = [MAX_FARE for _ in range(n + 1)]
-    dijkstra(s, fare_min)
-
+    fare_k = [MAX_FARE for _ in range(n + 1)]
+    fare_a = [MAX_FARE for _ in range(n + 1)]
+    fare_b = [MAX_FARE for _ in range(n + 1)]
+    dijkstra(s, fare_k)
+    dijkstra(a, fare_a)
+    dijkstra(b, fare_b)
+    
     answer = MAX_FARE
-    for i in range(1, n + 1):
-        temp_fare = [MAX_FARE for _ in range(n + 1)]
-        dijkstra(i, temp_fare)
-        cur_fare = fare_min[i] + temp_fare[a] + temp_fare[b]
-        if cur_fare < answer:
+    for i in range(1, n+1):
+        cur_fare = fare_k[i] + fare_a[i] + fare_b[i]
+        if answer > cur_fare:
             answer = cur_fare
                 
     return answer
