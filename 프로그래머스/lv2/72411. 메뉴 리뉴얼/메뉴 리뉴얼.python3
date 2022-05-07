@@ -1,0 +1,20 @@
+from itertools import combinations as comb
+from collections import defaultdict
+
+def solution(orders, course):
+    menu = defaultdict(int)
+    orders = [sorted(s) for s in orders]
+    for c in course:
+        for o in orders:
+            if len(o) >= c:
+                for t in list(map(lambda x: "".join(x), comb(o, c))):
+                    menu[t] += 1
+    answer = []
+    sorted_m = sorted(list(menu.items()), key= lambda x: x[1], reverse=True)
+    m_cnt = dict((c, 0) for c in course)
+    print(sorted_m)
+    for m, cnt in sorted_m:
+        if cnt >= 2 and m_cnt[len(m)] <= cnt:
+            answer.append(m)
+            m_cnt[len(m)] = cnt
+    return sorted(answer)
