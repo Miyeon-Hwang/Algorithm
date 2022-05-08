@@ -1,0 +1,17 @@
+def solution(s):
+    first_c = "zotfsen"
+    str_list = ["ze", "on", "tw", "th", "fo", "fi", "si", "se", "ei", "ni"]
+    len_str = [4, 3, 3, 5, 4, 4, 3, 5, 5, 4]
+    answer = ""
+    i = 0
+    while i < len(s):
+        cur = s[i]
+        if s[i] in first_c:
+            t_str = s[i:i+2]
+            t_num = str_list.index(t_str)
+            cur = str(t_num)
+            i += len_str[t_num]
+        else:
+            i += 1
+        answer += cur
+    return int(answer)
