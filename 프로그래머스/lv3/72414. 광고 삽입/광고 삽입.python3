@@ -1,0 +1,35 @@
+def convert_to_sec(str_time):  # str_time format : "hh:mm:ss"
+    t_list = list(map(int, str_time.split(":")))
+    return t_list[0] * 3600 + t_list[1] * 60 + t_list[2]
+
+
+def convert_to_str_time(sec):
+    m, s = divmod(sec, 60)
+    h, m = divmod(m, 60)
+    return f"{h:02d}:{m:02d}:{s:02d}"
+
+
+def solution(play_time, adv_time, logs):
+    play_time = convert_to_sec(play_time)
+    adv_time = convert_to_sec(adv_time)
+    viewers = [0] * (play_time + 1)  # 전체 영상에서 각 초의 viewer 수
+    for log in logs:
+        s, e = map(convert_to_sec, log.split("-"))
+        viewers[s] += 1
+        viewers[e] -= 1
+        # for i in range(s, e):
+        #     viewers[i] += 1
+    
+    for i in range(1, play_time + 1):
+        viewers[i] += viewers[i - 1]
+
+    start = 0
+    temp_sum = sum(viewers[:adv_time])
+    answer = start
+    final_sum = temp_sum
+    for s in range(start + 1, play_time - adv_time + 1):
+        temp_sum += viewers[s + adv_time - 1] - viewers[s - 1]
+        if temp_sum > final_sum:
+            final_sum = temp_sum
+            answer = s
+    return convert_to_str_time(answer)
