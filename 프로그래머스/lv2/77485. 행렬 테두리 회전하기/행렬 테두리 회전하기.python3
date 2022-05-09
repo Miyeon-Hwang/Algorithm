@@ -1,15 +1,6 @@
 def solution(rows, columns, queries):
-    table = [[0 for _ in range(columns)] for _ in range(rows)]
-    num = 1
-    for r in range(rows):
-        for c in range(columns):
-            table[r][c] = num
-            num += 1
-
-    if len(queries) == 1:
-        return [table[queries[0][0] - 1][queries[0][1] - 1]]
-
-    oper_x = [0, 1, 0, -1] # 시계 방향 회전을 위해
+    table = [[(r*columns + c) for c in range(1, columns + 1)] for r in range(rows)]
+    oper_x = [0, 1, 0, -1]
     oper_y = [1, 0, -1, 0]
     answer = []
     for q in queries:
