@@ -1,26 +1,44 @@
 def solution(rows, columns, queries):
-    answer = []
-    board = [[i+(j)*columns for i in range(1,columns+1)] for j in range(rows)]
-    # print(board)
-    for a,b,c,d in queries:
-        stack = []
-        r1, c1, r2, c2 = a-1, b-1, c-1, d-1
+    table = [[0 for _ in range(columns)] for _ in range(rows)]
+    num = 1
+    for r in range(rows):
+        for c in range(columns):
+            table[r][c] = num
+            num += 1
 
-        for i in range(c1, c2+1):
-            stack.append(board[r1][i])
-            if len(stack) == 1:
-                continue
-            else:
-                board[r1][i] = stack[-2]
-        for j in range(r1+1, r2+1):
-            stack.append(board[j][i])
-            board[j][i] = stack[-2]
-        for k in range(c2-1, c1-1, -1):
-            stack.append(board[j][k])
-            board[j][k] = stack[-2]
-        for l in range(r2-1, r1-1, -1):
-            stack.append(board[l][k])
-            board[l][k] = stack[-2]
-        answer.append(min(stack))
+    if len(queries) == 1:
+        return [table[queries[0][0] - 1][queries[0][1] - 1]]
+
+    oper_x = [0, 1, 0, -1] # 시계 방향 회전을 위해
+    oper_y = [1, 0, -1, 0]
+    answer = []
+    for q in queries:
+        x1, y1, x2, y2 = list(map(lambda x: x - 1, q))
+        min_val = table[x1][y1]
+        oper = 0
+        cur = (x1, y1)
+        val = min_val
+        while oper != -1: # 회전이 다끝나면 oper = -1
+            cx, cy = cur
+            nx, ny = (cx + oper_x[oper], cy + oper_y[oper])
+            if min_val > table[nx][ny]:
+                min_val = table[nx][ny]
+
+            val, table[nx][ny] = (table[nx][ny], val)
+
+            # 방향 바뀌는 지점마다 oper 변경
+            if nx == x1:
+                if ny == y2:
+                    oper = 1
+                elif ny == y1:
+                    oper = -1
+            elif nx == x2:
+                if ny == y1:
+                    oper = 3
+                elif ny == y2:
+                    oper = 2
+            cur = (nx, ny)
+
+        answer.append(min_val)
 
     return answer
