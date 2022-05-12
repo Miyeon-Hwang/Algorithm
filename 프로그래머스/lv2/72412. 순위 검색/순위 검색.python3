@@ -1,0 +1,28 @@
+# set 교집합으로 풀어봤는데 효율성 테스트가 통과가 안됨..
+# 이렇게 "-" 포함한 문자열 가능한 조합으로 dict 만들어놓고 풀어야만 하는건가..?
+
+from bisect import bisect_left
+from collections import defaultdict
+
+def solution(info, query):
+    table = defaultdict(list)
+    for i in info:
+        i = i.split()
+        for a in [i[0], '-']:
+            for b in [i[1], '-']:
+                for c in [i[2], '-']:
+                    for d in [i[3], '-']:
+                        key = a + b + c + d
+                        table[key].append(int(i[4]))
+                        
+    for l in table.values():
+        l.sort()
+        
+    ans = []
+    for q in query:
+        q = q.replace(" and", "").split()
+        key = "".join(q[:-1])
+        score = int(q[-1])
+        s_idx = bisect_left(table[key], score)
+        ans.append(len(table[key]) - s_idx)
+    return ans
