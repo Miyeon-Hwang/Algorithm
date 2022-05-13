@@ -1,0 +1,33 @@
+def get_d_between_ab(a, b):
+    temp = a - b if a > b else b - a
+    return sum(divmod(temp, 3))
+
+def solution(numbers, hand):
+    answer = ''
+    left, right = 10, 12
+    for n in numbers:
+        t = n % 3
+        if t == 1:
+            answer += "L"
+        elif t  == 0 and n > 0:
+            answer += "R"
+        else:
+            if n == 0:
+                n = 11
+            d_left = get_d_between_ab(n, left)
+            d_right = get_d_between_ab(n, right)
+            if d_left > d_right:
+                answer += "R"
+            elif d_left < d_right:
+                answer += "L"
+            elif hand == "left":
+                answer += "L"
+            else:
+                answer += "R"
+                
+        if answer[-1] == "L":
+            left = n
+        else:
+            right = n
+            
+    return answer
