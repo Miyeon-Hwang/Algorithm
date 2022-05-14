@@ -1,4 +1,21 @@
-# for문 한번만 돌면서 이름바뀌면 이전 출력문에서도 닉네임 수정해주는 방법
+def solution(record):
+    msg = {"Enter":"님이 들어왔습니다.", "Leave":"님이 나갔습니다."}
+    users = dict() # key=id, value=nickname
+    for r in record:
+        r = r.split()
+        if r[0] != "Leave":
+            uid, nick = r[1], r[2]
+            users[uid] = nick
+    answer = []
+    for r in record:
+        r = r.split()
+        if r[0] != "Change":
+            answer.append(users[r[1]] + msg[r[0]])
+    return answer
+
+#=================================================================
+
+# 2. for문 한번만 돌면서 이름바뀌면 이전 출력문에서도 닉네임 수정해주는 방법
 # 메모리: 59.1 MB, 시간: 113.70 ms
 # from collections import defaultdict
 
@@ -28,26 +45,3 @@
 #         answer.append(nick + msg[cmd])
 #         outputs[uid].append((len(answer) - 1, cmd))
 #     return answer
-
-# ================================================
-# 쉽게 for문 두번 돌때랑 시간을 비교해보자
-def solution(record):
-    dic = dict()
-    my_record = []
-    answer = []
-    for item in record:
-        act, uid = item.split(' ')[:2]
-        if act != 'Leave':
-            name = item.split(' ')[2]
-            dic[uid] = name
-            if act == 'Change':
-                continue
-        my_record.append((act, uid))
-
-    for item in my_record:
-        if item[0] == 'Enter':
-            answer.append(dic[item[1]] + '님이 들어왔습니다.')
-        else:
-            answer.append(dic[item[1]] + '님이 나갔습니다.')
-
-    return answer
