@@ -1,0 +1,17 @@
+from collections import Counter
+
+def solution(N, stages):
+    cnt_stages = Counter(stages)
+    fail_rate = [] # (stage, failrate)
+    n_user = len(stages)
+    n_lower_user = 0
+    for i in range(1, N + 1):
+        if cnt_stages[i] == 0:
+            f_rate = 0
+        else:
+            f_rate = cnt_stages[i] / (n_user - n_lower_user)
+        fail_rate.append((i, f_rate))
+        n_lower_user += cnt_stages[i]
+        
+    fail_rate.sort(key=lambda x: x[1], reverse = True)
+    return [x[0] for x in fail_rate]
