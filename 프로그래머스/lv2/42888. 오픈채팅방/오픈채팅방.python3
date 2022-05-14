@@ -1,0 +1,28 @@
+from collections import defaultdict
+
+def solution(record):
+    def change_prev_outputs(uid):
+        if uid in outputs:
+            for o in outputs[uid]:
+                prev_i, prev_c = o
+                answer[prev_i] = nick + msg[prev_c]
+        
+    msg = {"Enter":"님이 들어왔습니다.", "Leave":"님이 나갔습니다."}
+    users = dict() # key=id, value=nickname
+    outputs = defaultdict(list) # key=id, value=[(index, cmd)]
+    answer = []
+    for i, r in enumerate(record):
+        r = r.split()
+        cmd, uid = r[0], r[1]
+        nick = ''
+        if cmd == "Leave":
+            nick = users[uid]
+        else:
+            nick = r[2]
+            users[uid] = nick
+            change_prev_outputs(uid)
+            if cmd == "Change":
+                continue
+        answer.append(nick + msg[cmd])
+        outputs[uid].append((len(answer) - 1, cmd))
+    return answer
