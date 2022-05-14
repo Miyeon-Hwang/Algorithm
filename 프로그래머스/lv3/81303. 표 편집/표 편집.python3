@@ -21,7 +21,7 @@ def solution(n, k, cmd):
         if next < n:
             table[next][0] = cur
 
-    table = dict()
+    table = [0 for _ in range(n)]
     for i in range(n):
         table[i] = [i - 1, i + 1]
     deleted = []
