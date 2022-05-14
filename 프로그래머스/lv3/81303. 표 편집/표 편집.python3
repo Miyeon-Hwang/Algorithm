@@ -1,41 +1,92 @@
+# def solution(n, k, cmd):
+#     def move(cur, cnt, direction):
+#         d = 0 if direction == -1 else 1
+#         for i in range(cnt):
+#             cur = table[cur][d]
+#         return cur
+
+#     def delete_from_table(cur):
+#         deleted.append(cur)
+#         prev, next = table[cur]
+#         if prev >= 0:
+#             table[prev][1] = next
+#         if next < n:
+#             table[next][0] = prev
+#         return prev if next > n - 1 else next
+
+#     def restore(cur):
+#         prev, next = table[cur] # 가장 최근에 삭제된 애가 restore 되니까 cur의 prev, next에 그대로 연결해주면 됨
+#         if prev >= 0:
+#             table[prev][1] = cur
+#         if next < n:
+#             table[next][0] = cur
+
+#     table = [0 for _ in range(n)]
+#     for i in range(n):
+#         table[i] = [i - 1, i + 1]
+#     deleted = []
+#     select = k
+#     for c in cmd:
+#         if c[0] == "U":
+#             select = move(select, int(c[2:]), -1)
+#         elif c[0] == "D":
+#             select = move(select, int(c[2:]), 1)
+#         elif c[0] == "C":
+#             select = delete_from_table(select)
+#         else: # Z
+#             restore(deleted.pop())
+#     answer = ['O' for i in range(n)]
+#     for d in deleted:
+#         answer[d] = 'X'
+#     return ''.join(answer)
+
+# ====================================================================
+# 연습 겸 DoubleLinkedList로 직접 구현해서 풀어봄
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.prev = None
+        self.next = None
+
+class DoubleLinkedList:
+    def __init__(self):
+        self.head = Node("head")
+        self.tail = Node("tail")
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def append(self, node):
+        node.next = self.tail
+        node.prev = self.tail.prev
+        self.tail.prev.next = node
+        self.tail.prev = node            
+
 def solution(n, k, cmd):
-    def move(cur, cnt, direction):
-        d = 0 if direction == -1 else 1
-        for i in range(cnt):
-            cur = table[cur][d]
-        return cur
-
-    def delete_from_table(cur):
-        deleted.append(cur)
-        prev, next = table[cur]
-        if prev >= 0:
-            table[prev][1] = next
-        if next < n:
-            table[next][0] = prev
-        return prev if next > n - 1 else next
-
-    def restore(cur):
-        prev, next = table[cur] # 가장 최근에 삭제된 애가 restore 되니까 cur의 prev, next에 그대로 연결해주면 됨
-        if prev >= 0:
-            table[prev][1] = cur
-        if next < n:
-            table[next][0] = cur
-
-    table = [0 for _ in range(n)]
-    for i in range(n):
-        table[i] = [i - 1, i + 1]
+    table = DoubleLinkedList()
     deleted = []
-    select = k
+    cur_n = None
+    for i in range(n):
+        new_n = Node(i)
+        table.append(new_n)
+        if i == k:
+            cur_n = new_n
     for c in cmd:
         if c[0] == "U":
-            select = move(select, int(c[2:]), -1)
+            for i in range(int(c[2:])):
+                cur_n = cur_n.prev
         elif c[0] == "D":
-            select = move(select, int(c[2:]), 1)
+            for i in range(int(c[2:])):
+                cur_n = cur_n.next
         elif c[0] == "C":
-            select = delete_from_table(select)
-        else: # Z
-            restore(deleted.pop())
-    answer = ['O' for i in range(n)]
+            cur_n.prev.next = cur_n.next
+            cur_n.next.prev = cur_n.prev
+            deleted.append(cur_n)
+            cur_n = cur_n.prev if cur_n.next == table.tail else cur_n.next
+        else:
+            restore_n = deleted.pop()
+            restore_n.prev.next = restore_n
+            restore_n.next.prev = restore_n
+    answer = ['O'] * n
     for d in deleted:
-        answer[d] = 'X'
+        answer[d.data] = 'X'
     return ''.join(answer)
