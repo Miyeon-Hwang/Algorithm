@@ -2,16 +2,10 @@ from collections import Counter
 
 class Solution:    
     def longestSubstring(self, s: str, k: int) -> int:
-        if s == '' or len(s) < k:
+        if len(s) < k:
             return 0
         
         cnt_char = Counter(s)
-        for char, cnt in cnt_char.items():
-            if cnt >= k:
-                break
-        else:
-            return 0
-                
         start = 0
         max_len = 0
         for i, c in enumerate(s):
