@@ -5,13 +5,9 @@ class Solution:
         if len(s) < k:
             return 0
         
-        cnt_char = Counter(s)
-        start = 0
-        max_len = 0
+        # cnt_char = Counter(s) # Counter를 여기서 구하는게 재귀돌때마다 다 구하니까 오래걸리네..
         for i, c in enumerate(s):
-            if cnt_char[c] < k:
-                max_len = max(max_len, self.longestSubstring(s[start:i], k))
-                max_len = max(max_len, self.longestSubstring(s[i+1:], k))
-                return max_len
+            if s.count(c) < k:
+                return max(self.longestSubstring(s[:i], k), self.longestSubstring(s[i+1:], k))
         return len(s)
             
