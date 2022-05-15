@@ -9,12 +9,9 @@ class Solution:
         start = 0
         max_len = 0
         for i, c in enumerate(s):
-            if cnt_char[c] >= k:
-                if i == len(s) - 1:
-                    max_len = max(max_len, len(s) - start)
-            else:
+            if cnt_char[c] < k:
                 max_len = max(max_len, self.longestSubstring(s[start:i], k))
                 max_len = max(max_len, self.longestSubstring(s[i+1:], k))
-                break
-        return max_len
+                return max_len
+        return len(s)
             
