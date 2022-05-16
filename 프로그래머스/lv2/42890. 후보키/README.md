@@ -1,3 +1,5 @@
+### 중복 확인할 때, dictionary나 set이나 속도 비슷함.
+
 # [level 2] 후보키 - 42890 
 
 [문제 링크](https://programmers.co.kr/learn/courses/30/lessons/42890?language=python3) 
