@@ -16,11 +16,14 @@ def solution(relation):
         for c in comb(i_relation, i):
             if not check_minimality(c):
                 continue
-            hash_t = {}
+            #hash_t = {}
+            hash_set = set()
             for row in relation:
                 cur_key = ''.join([row[x] for x in c])
-                hash_t[cur_key] = 0
-            if len(hash_t.keys()) == num_rows:
+                hash_set.add(cur_key)
+                #hash_t[cur_key] = 0
+            #if len(hash_t.keys()) == num_rows:
+            if len(hash_set) == num_rows:
                 cand_keys.append(set(c))
         
     return len(cand_keys)
