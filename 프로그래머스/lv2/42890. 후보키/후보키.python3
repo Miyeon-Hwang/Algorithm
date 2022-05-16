@@ -1,0 +1,26 @@
+from itertools import combinations as comb
+
+def solution(relation):        
+    def check_minimality(cur):
+        cur = set(cur)
+        for key in cand_keys:
+            if not (key - cur):
+                return False
+        return True
+        
+    cand_keys = []
+    num_attr = len(relation[0])
+    num_rows = len(relation)
+    i_relation = [x for x in range(num_attr)]
+    for i in range(1, num_attr+1):
+        for c in comb(i_relation, i):
+            if not check_minimality(c):
+                continue
+            hash_t = {}
+            for row in relation:
+                cur_key = ''.join([row[x] for x in c])
+                hash_t[cur_key] = 0
+            if len(hash_t.keys()) == num_rows:
+                cand_keys.append(set(c))
+        
+    return len(cand_keys)
