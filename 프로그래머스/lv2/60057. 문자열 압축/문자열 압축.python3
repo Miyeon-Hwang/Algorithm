@@ -1,0 +1,25 @@
+# 숫자가 두자리수 이상이 될 수도 있다는 걸 생각 못함 ㅜㅜ
+
+def solution(s):
+    ans = len(s)
+    
+    for unit in range(1, len(s) // 2 + 1):
+        split = []
+        repeat = []
+        prev = 0
+        while prev < len(s):
+            if prev + unit > len(s):
+                break
+                
+            cur = s[prev:prev + unit]
+            if split and split[-1] == cur:
+                repeat[-1] += 1
+            else:
+                split.append(cur)
+                repeat.append(1)
+            prev = prev + unit
+        
+        cur_len = sum(len(str(r)) for r in repeat) - repeat.count(1) + len(repeat) * unit + len(s) % unit
+        if cur_len < ans:
+            ans = cur_len     
+    return ans
