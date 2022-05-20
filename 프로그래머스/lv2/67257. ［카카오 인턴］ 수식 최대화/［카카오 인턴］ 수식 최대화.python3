@@ -1,0 +1,50 @@
+from itertools import permutations as perm
+from collections import defaultdict
+
+def solution(expression):
+    OPERATION = ['+', '-', '*']
+    
+    def get_nums_and_opers():
+        nl = []
+        ol = defaultdict(list)
+        num = ''
+        cnt_oper = 0
+        for s in expression:
+            if s in OPERATION:
+                nl.append(sum([int(n) * 10**(len(num) - 1 - i) for i, n in enumerate(num)]))
+                ol[s].append(cnt_oper)
+                cnt_oper += 1
+                num = ''
+            else:
+                num += s
+        nl.append(sum([int(n) * 10**(len(num) - 1 - i) for i, n in enumerate(num)]))
+        return nl, ol
+    
+    def priority_calc(num, p):
+        for o in p:
+            for idx in opers[o]:
+                a = idx + 1
+                while True:
+                    if num[a] != '-':
+                        n_idx = a
+                        break
+                    a += 1
+
+                if o == OPERATION[0]:
+                    num[n_idx] = num[idx] + num[n_idx]
+                elif o == OPERATION[1]:
+                    num[n_idx] = num[idx] - num[n_idx]
+                else:
+                    num[n_idx] = num[idx] * num[n_idx]
+                num[idx] = '-'
+                if o == p[-1] and idx == opers[o][-1]:
+                    return num[n_idx]
+        
+    
+    nums, opers = get_nums_and_opers()
+    set_opers = set(opers)
+    answer = 0
+    for p in perm(set_opers, len(set_opers)):
+        temp_ans = priority_calc(nums[:], p)
+        answer = max(answer, temp_ans * (-1) if temp_ans < 0 else temp_ans)    
+    return answer
