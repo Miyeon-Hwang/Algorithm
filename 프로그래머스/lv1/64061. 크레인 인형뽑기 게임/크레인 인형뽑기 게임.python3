@@ -1,20 +1,15 @@
 def solution(board, moves):
-    n = len(board)
     stack = []
     cnt = 0
     for m in moves:
-        cur = 0
-        for i in range(n):
+        for i in range(len(board)):
             if board[i][m-1] > 0:
-                cur = board[i][m-1]
+                stack.append(board[i][m-1])
                 board[i][m-1] = 0
                 break
-        if cur == 0: 
-            continue
-        
-        if stack and stack[-1] == cur:
+                
+        if len(stack) > 1 and stack[-1] == stack[-2]:
+            stack.pop()
             stack.pop()
             cnt += 2
-        else:
-            stack.append(cur)
     return cnt
