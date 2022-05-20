@@ -1,50 +1,72 @@
-from itertools import permutations as perm
-from collections import defaultdict
+# 처음 생각나는대로 푼 풀이. 계산에 사용된 값을 '-'로 바꿔주기 때문에 이후에 루프돌면서 수를 찾아야함
+# 이걸 어떻게 해결하지 했는데... (input이 길지 않아서 시간은 빠름 0.09초)
+# from itertools import permutations as perm
+# from collections import defaultdict
 
-def solution(expression):
-    OPERATION = ['+', '-', '*']
+# def solution(expression):
+#     OPERATION = ['+', '-', '*']
     
-    def get_nums_and_opers():
-        nl = []
-        ol = defaultdict(list)
-        num = ''
-        cnt_oper = 0
-        for s in expression:
-            if s in OPERATION:
-                nl.append(sum([int(n) * 10**(len(num) - 1 - i) for i, n in enumerate(num)]))
-                ol[s].append(cnt_oper)
-                cnt_oper += 1
-                num = ''
-            else:
-                num += s
-        nl.append(sum([int(n) * 10**(len(num) - 1 - i) for i, n in enumerate(num)]))
-        return nl, ol
+#     def get_nums_and_opers():
+#         nl = []
+#         ol = defaultdict(list)
+#         num = ''
+#         cnt_oper = 0
+#         for s in expression:
+#             if s in OPERATION:
+#                 nl.append(sum([int(n) * 10**(len(num) - 1 - i) for i, n in enumerate(num)]))
+#                 ol[s].append(cnt_oper)
+#                 cnt_oper += 1
+#                 num = ''
+#             else:
+#                 num += s
+#         nl.append(sum([int(n) * 10**(len(num) - 1 - i) for i, n in enumerate(num)]))
+#         return nl, ol
     
-    def priority_calc(num, p):
-        for o in p:
-            for idx in opers[o]:
-                a = idx + 1
-                while True:
-                    if num[a] != '-':
-                        n_idx = a
-                        break
-                    a += 1
+#     def priority_calc(num, p):
+#         for o in p:
+#             for idx in opers[o]:
+#                 a = idx + 1
+#                 while True:
+#                     if num[a] != '-':
+#                         n_idx = a
+#                         break
+#                     a += 1
 
-                if o == OPERATION[0]:
-                    num[n_idx] = num[idx] + num[n_idx]
-                elif o == OPERATION[1]:
-                    num[n_idx] = num[idx] - num[n_idx]
-                else:
-                    num[n_idx] = num[idx] * num[n_idx]
-                num[idx] = '-'
-                if o == p[-1] and idx == opers[o][-1]:
-                    return num[n_idx]
+#                 if o == OPERATION[0]:
+#                     num[n_idx] = num[idx] + num[n_idx]
+#                 elif o == OPERATION[1]:
+#                     num[n_idx] = num[idx] - num[n_idx]
+#                 else:
+#                     num[n_idx] = num[idx] * num[n_idx]
+#                 num[idx] = '-'
+#                 if o == p[-1] and idx == opers[o][-1]:
+#                     return num[n_idx]
         
     
-    nums, opers = get_nums_and_opers()
-    set_opers = set(opers)
+#     nums, opers = get_nums_and_opers()
+#     set_opers = set(opers)
+#     answer = 0
+#     for p in perm(set_opers, len(set_opers)):
+#         temp_ans = priority_calc(nums[:], p)
+#         answer = max(answer, temp_ans * (-1) if temp_ans < 0 else temp_ans)    
+#     return answer
+
+# ===============================================================
+# 어마어마한 풀이ㅜㅜ 왜 생각을 못했을까
+from itertools import permutations as perm
+
+def calc(expression, prior, cnt_o): # priority 역으로 계산하는 거
+    if cnt_o == 2:
+        return eval(expression)
+    cur = prior[cnt_o]
+    calc_l = [str(calc(e, prior, cnt_o+1)) for e in expression.split(cur)]
+    return eval(cur.join(calc_l))
+    
+  
+def solution(expression):
     answer = 0
-    for p in perm(set_opers, len(set_opers)):
-        temp_ans = priority_calc(nums[:], p)
-        answer = max(answer, temp_ans * (-1) if temp_ans < 0 else temp_ans)    
+    for prior in perm(['+', '-', '*'], 3):
+        answer = max(answer, abs(calc(expression, prior, 0)))  
     return answer
+
+
