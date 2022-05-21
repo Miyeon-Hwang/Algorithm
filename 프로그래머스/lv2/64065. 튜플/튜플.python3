@@ -1,0 +1,11 @@
+def solution(s):
+    s = [list(map(int, ele.split(","))) for ele in s[2:-2].split("},{")]
+    s.sort(key = lambda x: len(x))    
+    answer = []
+    for i, e in enumerate(s):
+        if i == 0:
+            answer.append(e[0])
+        else:
+            diff = set(e) - set(s[i-1])
+            answer.append(diff.pop())          
+    return answer
