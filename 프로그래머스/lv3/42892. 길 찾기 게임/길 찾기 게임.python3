@@ -1,0 +1,60 @@
+from collections import defaultdict
+import sys
+sys.setrecursionlimit(10000)
+
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+class BT:
+    def __init__(self, sorted_ninfo):
+        self.root = None
+        sorted_ninfo.sort(reverse=True)
+        for h, nlist in sorted_ninfo:
+            self.insert_h_nodes(nlist)
+    
+    def insert_h_nodes(self, ninfo):
+        if self.root == None:
+            self.root = Node(ninfo[0])
+            return
+        for x, num in ninfo:
+            cur = self.root
+            while True:
+                if cur.value[0] > x:
+                    if cur.left == None:
+                        cur.left = Node([x, num])
+                        break
+                    cur = cur.left
+                else:
+                    if cur.right == None:
+                        cur.right = Node([x, num])
+                        break
+                    cur = cur.right
+
+    def preorder(self, node):
+        res = []
+        res.append(node.value[1])
+        if node.left != None:
+            res += self.preorder(node.left)
+        if node.right != None:
+            res += self.preorder(node.right)
+        return res
+        
+    def postorder(self,node):
+        res = []
+        if node.left != None:
+            res += self.postorder(node.left)
+        if node.right != None:
+            res += self.postorder(node.right)
+        res.append(node.value[1])
+        return res
+        
+def solution(nodeinfo):
+    dict_info = defaultdict(list)
+    for i, n in enumerate(nodeinfo):
+        x, y = n
+        dict_info[y].append([x, i+1])
+    bt = BT(list(dict_info.items()))
+    return [bt.preorder(bt.root), bt.postorder(bt.root)]
