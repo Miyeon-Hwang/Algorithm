@@ -1,0 +1,41 @@
+# 보급로 문제에서 h,v 방향고려하는 것만 추가된 문제라고 생각했는데(BFS + DP)
+# 아래 케이스에서 실패함.
+# [0, 0, 0, 0, 0, 0, 0, 0]
+# [1, 0, 1, 1, 1, 1, 1, 0]
+# [1, 0, 0, 1, 0, 0, 0, 0]
+# [1, 1, 0, 0, 0, 1, 1, 1]
+# [1, 1, 1, 1, 0, 0, 0, 0]
+# [1, 1, 1, 1, 1, 1, 1, 0]
+# [1, 1, 1, 1, 1, 1, 1, 0]
+# [1, 1, 1, 1, 1, 1, 1, 0]
+# 3차원 배열로 풀거나 queue에 탐색조건을 더 넣던가
+
+from collections import deque
+
+dr = [-1, 1, 0, 0] # 상하좌우
+dc = [0, 0, -1, 1]
+
+def solution(board):
+    n = len(board)
+    q = deque([(0, 0, 0, -1)])
+    cost_arr = [[10**6] * n for _ in range(n)]
+    answer = 10**6
+    while q:
+        r, c, cost, d  = q.popleft()
+        for i in range(4):
+            nr = r + dr[i]
+            nc = c + dc[i]
+            if nr < 0 or nr >= n or nc < 0 or nc >= n or board[nr][nc] == 1:
+                continue
+            nd = i
+            add_cost = 100 if d == -1 or d == nd else 600
+            t_cost = cost + add_cost
+            if cost_arr[nr][nc] >= t_cost - 400:
+                cost_arr[nr][nc] = t_cost
+                if nr == n - 1 and nc == n - 1:
+                    answer = min(answer, t_cost)
+                q.append((nr, nc, t_cost, nd))
+    return answer
+
+    
+    
