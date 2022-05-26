@@ -1,0 +1,24 @@
+# 최단거리 : dijkstra, bfs 둘 다 가능
+# dijkstra 사용하는거보다 bfs로 푸는게 더 빠르네?
+
+INF = 10 ** 6
+def solution(n, edge):
+    g = [[] for i in range(n + 1)]
+    for a,b in edge:
+        g[a].append(b)
+        g[b].append(a)
+    
+    queue = [1]
+    visited = [0] * (n + 1)
+    visited[1] = 1
+    answer = [0] * (n + 1)
+    while queue:
+        curn = queue.pop(0)
+        for n in g[curn]:
+            if visited[n] == 1:
+                continue
+            queue.append(n)
+            visited[n] = 1
+            answer[n] = answer[curn] + 1
+        
+    return answer.count(max(answer))
