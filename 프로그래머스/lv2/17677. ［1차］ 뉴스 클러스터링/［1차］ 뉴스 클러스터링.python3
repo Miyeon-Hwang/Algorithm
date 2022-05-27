@@ -1,0 +1,24 @@
+from collections import defaultdict
+
+def get_elements_dict(s):
+    res = defaultdict(int)
+    for i in range(len(s) - 1):
+        cur = s[i:i+2].upper()
+        if cur.isalpha():
+            res[cur] += 1
+    return res
+
+def solution(str1, str2):        
+    d1 = get_elements_dict(str1)
+    d2 = get_elements_dict(str2)
+    if not d1 and not d2:
+        return 65536
+    
+    s1 = set(d1.keys())
+    s2 = set(d2.keys())
+    inter_eles = s1.intersection(s2)
+    inter = 0
+    for e in inter_eles:
+        inter += min(d1[e], d2[e])
+    union = sum(d1.values()) + sum(d2.values()) - inter
+    return int(65536 * (inter / union))
