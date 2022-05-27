@@ -1,0 +1,29 @@
+from collections import defaultdict
+
+def solution(tickets):
+    
+    def dfs(cur, route):
+        route.append(cur)
+        if len(route) == len(tickets) + 1:
+            return
+        for dest in m_tickets[cur]:
+            t = (cur, dest)
+            if cnt_tickets[t] == 0:
+                continue
+            cnt_tickets[t] -= 1
+            dfs(dest, route)
+            if len(route) == len(tickets) + 1:
+                return
+            cnt_tickets[t] += 1
+        route.pop()
+        
+    m_tickets = defaultdict(list)
+    cnt_tickets = defaultdict(int)
+    for t in tickets:
+        m_tickets[t[0]].append(t[1])
+        cnt_tickets[tuple(t)] += 1
+    for v in m_tickets.values():
+        v.sort()
+    answer = []
+    dfs("ICN", answer)
+    return answer
