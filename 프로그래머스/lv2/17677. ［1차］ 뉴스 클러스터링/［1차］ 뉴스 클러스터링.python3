@@ -1,22 +1,40 @@
-from collections import defaultdict
+# from collections import defaultdict
 
-def get_elements_dict(s):
-    res = defaultdict(int)
-    for i in range(len(s) - 1):
-        cur = s[i:i+2].upper()
-        if cur.isalpha():
-            res[cur] += 1
-    return res
+# def get_elements_dict(s):
+#     res = defaultdict(int)
+#     for i in range(len(s) - 1):
+#         cur = s[i:i+2].upper()
+#         if cur.isalpha():
+#             res[cur] += 1
+#     return res
 
-def solution(str1, str2):    
-    d1 = get_elements_dict(str1)
-    d2 = get_elements_dict(str2)
-    if not d1 and not d2:
-        return 65536
+# def solution(str1, str2):    
+#     d1 = get_elements_dict(str1)
+#     d2 = get_elements_dict(str2)
+#     if not d1 and not d2:
+#         return 65536
     
-    inter_eles = set(d1.keys()).intersection(set(d2.keys()))
-    inter = 0
-    for e in inter_eles:
-        inter += min(d1[e], d2[e])
-    union = sum(d1.values()) + sum(d2.values()) - inter
-    return int(65536 * (inter / union))
+#     inter_eles = set(d1.keys()).intersection(set(d2.keys()))
+#     inter = 0
+#     for e in inter_eles:
+#         inter += min(d1[e], d2[e])
+#     union = sum(d1.values()) + sum(d2.values()) - inter
+#     return int(65536 * (inter / union))
+
+
+## Counter가 &, | 연산이 됨.
+from collections import Counter
+
+def solution(str1, str2):
+    l1 = [str1[i:i + 2].upper() for i in range(len(str1) - 1) if str1[i:i + 2].isalpha()]
+    l2 = [str2[i:i + 2].upper() for i in range(len(str2) - 1) if str2[i:i + 2].isalpha()]
+
+    c1 = Counter(l1)
+    c2 = Counter(l2)
+
+    if not c1 and not c2:
+        return 65536
+    return int(65536 * (sum((c1 & c2).values()) / sum((c1 | c2).values())))
+    
+    
+
