@@ -2,7 +2,7 @@ def solution(n, arr1, arr2):
     
     def get_wall_str(num):
         bn = str(bin(num))[2:]
-        bn = (n - len(bn)) * "0" + bn
+        bn = bn.rjust(n, "0")
         return "".join(["#" if b == "1" else " " for b in bn])    
 
     return [get_wall_str(arr1[i] | arr2[i]) for i in range(n)]
