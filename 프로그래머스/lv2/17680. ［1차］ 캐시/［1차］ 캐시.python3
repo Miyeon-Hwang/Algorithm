@@ -1,5 +1,7 @@
+from collections import deque
+
 def solution(cacheSize, cities):
-    cache = []
+    cache = deque(maxlen=cacheSize)
     answer = 0
     for c in cities:
         c = c.upper()
@@ -8,9 +10,6 @@ def solution(cacheSize, cities):
             cache.remove(c)
             cache.append(c)
         else:
-            if cacheSize > 0:
-                if len(cache) == cacheSize:
-                    cache.pop(0)
-                cache.append(c)
+            cache.append(c)
             answer += 5
     return answer
