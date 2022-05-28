@@ -1,3 +1,6 @@
+### Counter &, | 연산 사용 가능. 알아두자
+
+================================================================
 # [level 2] [1차] 뉴스 클러스터링 - 17677 
 
 [문제 링크](https://programmers.co.kr/learn/courses/30/lessons/17677?language=python3) 
