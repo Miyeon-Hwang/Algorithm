@@ -1,0 +1,29 @@
+def solution(board, skill):
+    n = len(board)
+    m = len(board[0])
+    prefixsum = [[0] * m for _ in range(n)]
+    for t, r1, c1, r2, c2, d in skill:
+        d = d if t == 2 else (-1) * d
+        prefixsum[r1][c1] += d
+        if r2 + 1 < n:
+            prefixsum[r2+1][c1] += (-1) * d
+        if c2 + 1 < m:
+            prefixsum[r1][c2+1] += (-1) * d
+        if r2 + 1 < n and c2 + 1 < m:
+            prefixsum[r2+1][c2+1] += d
+    
+    answer = 0
+    # skill 누적합 계산
+    for i in range(n):
+        for j in range(m):
+            if j > 0:
+                prefixsum[i][j] += prefixsum[i][j-1]
+    for j in range(m):
+        for i in range(n):
+            if i > 0:
+                prefixsum[i][j] += prefixsum[i-1][j]
+            # board와 계산
+            board[i][j] += prefixsum[i][j]
+            if board[i][j] > 0:
+                answer += 1
+    return answer
