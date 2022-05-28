@@ -1,0 +1,17 @@
+def solution(dartResult):
+    d_bonus = {"S":1, "D":2, "T":3}
+    score_list = []
+    cur = ""
+    for d in dartResult:
+        if d.isdigit():
+            cur += d
+        elif d.isalpha():
+            score_list.append(int(cur) ** d_bonus[d])
+            cur = ""
+        elif d == "*":
+            score_list[-1] *= 2
+            if len(score_list) > 1:
+                score_list[-2] *= 2
+        else:
+            score_list[-1] *= (-1)
+    return sum(score_list)
