@@ -1,0 +1,37 @@
+def solution(m, n, board):
+    
+    def move_board():
+        for i in range(m-1, 0, -1):
+            for j in range(n):
+                if list_b[i][j] == 0:
+                    if i < m -1 and list_b[i+1][j] == 0:
+                        continue
+                    cur_i = i - 1
+                    while list_b[cur_i][j] == 0 and cur_i > 0:
+                        cur_i -= 1
+                    list_b[i][j] = list_b[cur_i][j]
+                    list_b[cur_i][j] = 0
+                        
+    def delete_square():
+        del_set = set()
+        for i in range(m-1):
+            for j in range(n-1):
+                if list_b[i][j] == 0:
+                    continue
+                if list_b[i][j] == list_b[i][j+1] == list_b[i+1][j] == list_b[i+1][j+1]:
+                    del_set.add((i,j))
+                    del_set.add((i,j+1))
+                    del_set.add((i+1,j))
+                    del_set.add((i+1,j+1))
+        for i, j in del_set:
+            list_b[i][j] = 0
+        return len(del_set)
+                    
+    list_b = [list(b) for b in board]
+    answer = 0
+    while True:
+        cur = delete_square()
+        if cur == 0:
+            return answer
+        answer += cur
+        move_board()
