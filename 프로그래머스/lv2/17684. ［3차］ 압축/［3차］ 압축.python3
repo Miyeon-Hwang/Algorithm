@@ -1,0 +1,20 @@
+from collections import defaultdict
+
+def solution(msg):
+    d = defaultdict(int, [(chr(i), i - 64) for i in range(65, 91)])
+    idxnum = 27
+    answer = []
+    curi = 0
+    while curi < len(msg):
+        endi = curi + 1
+        while True:
+            if endi > len(msg):
+                break
+            if msg[curi:endi] not in d:
+                d[msg[curi:endi]] = idxnum
+                idxnum += 1
+                break
+            endi += 1
+        answer.append(d[msg[curi:endi-1]])
+        curi = endi-1
+    return answer
