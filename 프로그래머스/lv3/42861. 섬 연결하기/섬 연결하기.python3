@@ -1,0 +1,23 @@
+import heapq
+from collections import defaultdict
+
+
+def solution(n, costs):
+    cost_dict = defaultdict(list)
+    for a, b, c in costs:
+        cost_dict[a].append((c, a, b))
+        cost_dict[b].append((c, b, a))
+    answer = 0
+    # prim algorithm : start at 0
+    connected = [0] * n
+    connected[0] = 1
+    candidates = cost_dict[0]
+    heapq.heapify(candidates)
+    while candidates:
+        cost, a, b = heapq.heappop(candidates)
+        if connected[b] == 0:
+            connected[b] = 1
+            answer += cost
+            for can in cost_dict[b]:
+                heapq.heappush(candidates, can)
+    return answer
