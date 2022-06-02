@@ -1,0 +1,21 @@
+def get_maxnum_and_index(nlist):
+    res = (-1, -1)
+    for i, n in enumerate(nlist):
+        if n == 9:
+            return (n, i)
+        if res[0] < n:
+            res = (n, i)
+    return res
+
+def solution(number, k):
+    nlist = list(map(int, number))
+    l = len(number)
+    answer = ''
+    left = 0
+    num_cnt = l - k
+    while num_cnt > 0:
+        curnum, curidx = get_maxnum_and_index(nlist[left:l - num_cnt + 1])
+        answer += str(curnum)
+        left += curidx + 1
+        num_cnt -= 1
+    return answer
